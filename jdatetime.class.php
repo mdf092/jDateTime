@@ -152,16 +152,12 @@ class jDateTime
                         $v = self::getDayNames($obj->format('l'), false, 1, true) - 1;
                         break;
                     case 'z':
-                        if ($jmonth > 6) {
-                            $v = 186 + (($jmonth - 6 - 1) * 30) + $jday;
-                        }
-                        else {
-                            $v = (($jmonth - 1) * 31) + $jday;
-                        }
+                        $v = self::getDayNum($jmonth, $jday);
                         self::$temp['z'] = $v;
                         break;
                     //Week
                     case 'W':
+                    	self::$temp['z'] = self::getDayNum($jmonth, $jday);
                         $v = is_int(self::$temp['z'] / 7) ? (self::$temp['z'] / 7) : intval(self::$temp['z'] / 7 + 1);
                         break;
                     //Month
@@ -239,6 +235,33 @@ class jDateTime
 
         }
 
+    }
+
+    /**
+     * jDateTime:getDayNum
+     * Based on Jalai month and day, it returns The day of the year (starting from 0).
+     * 
+     * e.g echo jDateTime::getDayNum(12,29); 
+     * 
+     * @author Mohammad Damavandi
+     * @param $jmonth int Jalali Month of year between 1-12
+     * @param $jday int Jalali Month of year between 1-31
+     * 
+     * @return int The day of the year (starting from 0). returns false for invalid $jmonth and $jday
+     */
+    public static function getDayNum($jmonth, $jday)
+    {
+        if($jmonth < 1 || $jmonth > 12 || $jday < 1 || $value > 31){
+            return false;
+        }
+        if ($jmonth > 6) {
+            $v = 186 + (($jmonth - 6 - 1) * 30) + $jday;
+        }
+        else {
+            $v = (($jmonth - 1) * 31) + $jday;
+        }
+        
+        return $v;
     }
 
     /**
